@@ -20,9 +20,9 @@ release 'shozab_Release_Demo', {
         }
 
       gate 'POST', {
-        task 'Code Coverage > 75', {
+        task 'Code Coverage > 80', {
           gateCondition = '''$[/javascript 
-  //myStageRuntime.tasks[\'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.coverage]	> 75	]'''
+  //myStageRuntime.tasks[\'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.coverage]	> 80	]'''
           gateType = 'POST'
           subproject = 'POC'
           taskType = 'CONDITIONAL'
