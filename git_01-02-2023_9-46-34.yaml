@@ -1,0 +1,22 @@
+apiVersion: cloudbees.com/v10.11
+kind: pluginConfiguration
+metadata:
+  name: git
+  projectName: POC
+spec:
+  field:
+    - name: authType
+      value: token
+    - name: debugLevel
+      value: 0
+    - name: ignoreSSLErrors
+      value: false
+    - name: library
+      value: jgit
+    - name: token_credential
+      value: token_credential
+  pluginKey: EC-Git
+  credentials:
+    - name: token_credential
+      passwordRecoveryAllowed: 1
+      projectName: POC
