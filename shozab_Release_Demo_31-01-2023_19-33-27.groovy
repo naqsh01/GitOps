@@ -76,7 +76,7 @@ release 'shozab_Release_Demo', {
         subservice = ''
       }
 
-      task 'Quality Checks ', {
+      task 'Quality Checks 2 ', {
         subproject = 'POC'
         taskType = 'GROUP'
 
