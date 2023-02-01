@@ -1,0 +1,24 @@
+apiVersion: cloudbees.com/v10.11
+kind: pluginConfiguration
+metadata:
+  name: JenkinsOSS
+  projectName: POC
+spec:
+  field:
+    - name: checkConnectionResource
+      value: local
+    - name: credential
+      value: credential
+    - name: debug_level
+      value: 0
+    - name: ignoreSSLErrors
+      value: 0
+    - name: server
+      value: |-2
+        https://sda.sda-poc.cb-demos.io/poc
+  pluginKey: EC-Jenkins
+  credentials:
+    - name: credential
+      passwordRecoveryAllowed: 1
+      projectName: POC
+      userName: admin
