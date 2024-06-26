@@ -1,5 +1,5 @@
 release 'Shozab Demo Release', {
-  plannedEndDate = '2024-07-10T11:28'
+  plannedEndDate = '2024-07-11T11:28'
   plannedStartDate = '2024-06-26T11:28'
   projectName = 'snaqvi Demo'
   timeZone = 'America/New_York'
