@@ -1,10 +1,11 @@
-release 'shozab_Release_Demo', {
-  plannedEndDate = '2023-02-14'
-  plannedStartDate = '2023-01-31'
-  projectName = 'POC'
+release 'Shozab Demo Release', {
+  plannedEndDate = '2024-07-10T11:28'
+  plannedStartDate = '2024-06-26T11:28'
+  projectName = 'snaqvi Demo'
+  timeZone = 'America/New_York'
 
   pipeline 'Template Release Workflow', {
-    releaseName = 'shozab_Release_Demo'
+    releaseName = 'Shozab Demo Release'
     templatePipelineName = 'Template Release Workflow'
     templatePipelineProjectName = 'POC'
 
@@ -14,17 +15,16 @@ release 'shozab_Release_Demo', {
 
     stage 'Release Readiness', {
       colorCode = '#00adee'
-      duration = '0'
+      duration = '11520'
       pipelineName = 'Template Release Workflow'
-      gate 'PRE', {
-        }
-
+      plannedEndDate = '2021-08-10T00:00'
+      plannedStartDate = '2021-08-02T00:00'
       gate 'POST', {
-        task 'Code Coverage > 90', {
+        task 'Code Coverage > 75', {
           gateCondition = '''$[/javascript 
-  //myStageRuntime.tasks[\'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.coverage]	> 90	]'''
+  //myStageRuntime.tasks[\'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.coverage]	> 75	]'''
           gateType = 'POST'
-          subproject = 'POC'
+          subproject = 'snaqvi Demo'
           taskType = 'CONDITIONAL'
 
           // Custom properties
@@ -36,7 +36,7 @@ release 'shozab_Release_Demo', {
   myStageRuntime.tasks[
   \'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.violations]	< 10	]'''
           gateType = 'POST'
-          subproject = 'POC'
+          subproject = 'snaqvi Demo'
           taskType = 'CONDITIONAL'
 
           // Custom properties
@@ -46,28 +46,33 @@ release 'shozab_Release_Demo', {
 
       task 'Get Jira Tickets', {
         actualParameter = [
-          'config': '/projects/POC/pluginConfigurations/jira',
+          'config': '/projects/Demo Onboarding/pluginConfigurations/cb-demos-jira',
           'createLink': '1',
           'fieldsToSave': '',
           'filter': '',
-          'jql': 'project = POC ',
+          'jql': 'Project = BT and summary !~ "Exemption requested by"',
           'maxResults': '',
           'resultFormat': 'propertySheet',
           'resultProperty': '/myJob/getIssuesResult',
         ]
+        stageSummaryParameters = '[{"label":"JIRA IDs","name":"jiraids"},{"label":"JIRA Report","name":"jirareporturl"}]'
         subpluginKey = 'EC-JIRA'
         subprocedure = 'GetIssues'
         taskType = 'PLUGIN'
+
+        // Custom properties
+        subservice = ''
       }
 
       task 'Verify Jenkins Build Status', {
         actualParameter = [
-          'build_number': '',
-          'config_name': '/projects/POC/pluginConfigurations/jenkins',
-          'job_name': 'Pet%20Clinic',
+          'build_number': '46',
+          'config_name': '/projects/snaqvi Demo/pluginConfigurations/snaqvi',
+          'job_name': 'Pet%20Store%20Pipeline',
           'need_to_run_report': '1',
           'result_outpp': '/myJobStep/buildDetails',
         ]
+        enabled = '0'
         subpluginKey = 'EC-Jenkins'
         subprocedure = 'GetBuildDetails'
         taskType = 'PLUGIN'
@@ -76,13 +81,12 @@ release 'shozab_Release_Demo', {
         subservice = ''
       }
 
-      task 'Quality Checks 2 ', {
-        subproject = 'POC'
+      task 'Quality Checks ', {
         taskType = 'GROUP'
 
         task 'Code Quality And Security Scan', {
           actualParameter = [
-            'config': '/projects/POC/pluginConfigurations/sonarqube',
+            'config': '/projects/Demo Onboarding/pluginConfigurations/cb-demos-sonar',
             'resultFormat': 'propertysheet',
             'resultSonarProperty': '/myJob/getLastSonarMetrics',
             'sonarMetricsComplexity': 'all',
@@ -95,8 +99,8 @@ release 'shozab_Release_Demo', {
             'sonarMetricsReliability': 'all',
             'sonarMetricsSecurity': 'all',
             'sonarMetricsTests': 'all',
-            'sonarProjectKey': 'petstore ',
-            'sonarProjectName': 'petstore ',
+            'sonarProjectKey': 'petclinic',
+            'sonarProjectName': 'petclinic',
             'sonarProjectVersion': '2.2.0.BUILD-SNAPSHOT',
             'sonarTaskId': '',
             'sonarTimeout': '',
@@ -117,20 +121,18 @@ release 'shozab_Release_Demo', {
 
     stage 'QA', {
       colorCode = '#ff7f0e'
-      duration = '4320'
+      duration = '7200'
       pipelineName = 'Template Release Workflow'
-      plannedEndDate = '2023-02-04T05:00'
-      plannedStartDate = '2023-02-01T05:00'
+      plannedEndDate = '2021-08-14T00:00'
+      plannedStartDate = '2021-08-09T00:00'
       gate 'PRE', {
         task 'Wait for Release Manager Approval', {
           gateType = 'PRE'
           notificationEnabled = '1'
           notificationTemplate = 'ec_default_gate_task_notification_template'
-          subproject = 'POC'
           taskType = 'APPROVAL'
           approver = [
-            'admin',
-            'POC_General_Users',
+            'snaqvi',
           ]
 
           // Custom properties
@@ -142,7 +144,7 @@ release 'shozab_Release_Demo', {
         task '75% Passing QA Tests', {
           gateCondition = 'echo "Exit gate check for Testing..."'
           gateType = 'POST'
-          subproject = 'POC'
+          subproject = 'snaqvi Demo'
           taskType = 'CONDITIONAL'
 
           // Custom properties
@@ -152,7 +154,7 @@ release 'shozab_Release_Demo', {
         task 'No P1s & P2s Issues', {
           gateCondition = 'echo "Exit gate check for Jira for Sev1/Sev2..."'
           gateType = 'POST'
-          subproject = 'POC'
+          subproject = 'snaqvi Demo'
           taskType = 'CONDITIONAL'
 
           // Custom properties
@@ -162,7 +164,7 @@ release 'shozab_Release_Demo', {
 
       task 'Deploy to QA', {
         deployerRunType = 'serial'
-        subproject = 'POC'
+        enabled = '0'
         taskType = 'DEPLOYER'
 
         // Custom properties
@@ -358,7 +360,7 @@ table.body .article {
           'text': '',
           'textFile': '',
           'textType': 'text',
-          'toList': 'POC_General_Users',
+          'toList': 'snaqvi@cloudbees.com',
         ]
         resourceName = 'k8s-agent'
         subpluginKey = 'EC-SendEmail'
@@ -367,12 +369,8 @@ table.body .article {
       }
 
       task 'Run Functional Test', {
-        actualParameter = [
-          'commandToRun': '''echo "Call Selenium API for enabling Feature Flag experiment for QA env" 
-  ectool setProperty \'/myStageRuntime/ec_summary/Test Report\' \'<HTML><a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vQ2H8g-Y1omFLVyXDcmODlvrXY04D_Pf4r3ZQ9axP0YomUds0iSs5R05spQl9XRg6Ggmjgq6PW_pO4L/pubhtml?gid=368743228&single=true" target="_blank"> View Report </a> </html>\'''',
-        ]
-        subpluginKey = 'EC-Core'
-        subprocedure = 'RunCommand'
+        command = '''echo "Call Selenium API for enabling Feature Flag experiment for QA env" 
+  ectool setProperty \'/myStageRuntime/ec_summary/Test Report\' \'<HTML><a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vQ2H8g-Y1omFLVyXDcmODlvrXY04D_Pf4r3ZQ9axP0YomUds0iSs5R05spQl9XRg6Ggmjgq6PW_pO4L/pubhtml?gid=368743228&single=true" target="_blank"> View Report </a> </html>\''''
         taskType = 'COMMAND'
 
         // Custom properties
@@ -383,7 +381,6 @@ table.body .article {
         enabled = '0'
         notificationEnabled = '1'
         notificationTemplate = 'ec_default_pipeline_manual_task_notification_template'
-        subproject = 'POC'
         taskType = 'MANUAL'
         approver = [
           'admin',
@@ -395,10 +392,10 @@ table.body .article {
 
       task 'Create ServiceNow ticket', {
         actualParameter = [
-          'config_name': '/projects/POC/pluginConfigurations/snow',
+          'config_name': '/projects/AcmeGlobal/pluginConfigurations/WesSnowTest',
           'content': '''{
 "description":"Change request created from ElectricFlow Pipeline -  $[/myPipelineRuntime/name]. k8-microblog Application deployed to the PM environment and testing is done. Please approve the Change Request to begin the Production deployment. More details can be found by following the URL in the \'Activity\' field below.",
-"comments":"[code] <a href=\'https://sda.sda-poc.cb-demos.io/flow/?s=Flow+Tools&ss=Flow#pipeline-run/$[/myPipeline/id]/$[/myPipelineRuntime/id]\'> Link to the Release Pipeline </a> <br> <p> <b>Release Evidence:</b>$[/javascript
+"comments":"[code] <a href=\'https://sda.preview.cb-demos.io/flow/?s=Flow+Tools&ss=Flow#pipeline-run/$[/myPipeline/id]/$[/myPipelineRuntime/id]\'> Link to the ElectricFlow Pipeline </a> <br> <p> <b>Release Evidence:</b>$[/javascript
 var props = ""; 
 for (var propName in myPipelineRuntime.stages[\'Release Readiness\'].ec_summary.properties) {
     if (propName !== "Jenkins Report:") 
@@ -424,27 +421,22 @@ props.replace(/"/g, \'\\\'\');
 
     stage 'Prod', {
       colorCode = '#d62728'
-      duration = '4320'
+      duration = '2880'
       pipelineName = 'Template Release Workflow'
-      plannedEndDate = '2023-02-08T05:00'
-      plannedStartDate = '2023-02-05T05:00'
+      plannedEndDate = '2021-08-21T00:00'
+      plannedStartDate = '2021-08-19T00:00'
       gate 'PRE', {
         task 'WaitforCR_Approval', {
-          actualParameter = [
-            'Configuration': '/projects/POC/pluginConfigurations/snow',
-            'PollingInterval': '60',
-            'RecordID': '$[/myPipelineRuntime/stages/QA/ChangeRequestNumber]',
-            'TargetState': 'approved',
-          ]
           gateType = 'PRE'
-          subprocedure = 'Poll for target approval status'
-          subproject = 'ServiceNow'
-          taskType = 'PROCEDURE'
+          notificationEnabled = '1'
+          notificationTemplate = 'ec_default_gate_task_notification_template'
+          taskType = 'APPROVAL'
+          approver = [
+            'sa-users',
+            'ServiceNowChangeApprovers',
+          ]
         }
       }
-
-      gate 'POST', {
-        }
 
       task 'Wait for CR is Scheduled', {
         actualParameter = [
@@ -453,14 +445,15 @@ props.replace(/"/g, \'\\\'\');
           'RecordID': '$[/myPipelineRuntime/stages/QA/ChangeRequestNumber]',
           'TargetState': '-2',
         ]
-        subprocedure = 'Poll for target record state'
+        enabled = '0'
+        subprocedure = 'Poll for target CR state'
         subproject = 'ServiceNow'
         taskType = 'PROCEDURE'
       }
 
       task 'Implement Change Request Ticket', {
         actualParameter = [
-          'config_name': '/projects/POC/pluginConfigurations/snow',
+          'config_name': '/projects/AcmeGlobal/pluginConfigurations/WesSnowTest',
           'content': '{"state":"-1"}',
           'filter': '',
           'property_sheet': '/myJobStep',
@@ -473,7 +466,7 @@ props.replace(/"/g, \'\\\'\');
 
       task 'Deploy to Prod', {
         deployerRunType = 'serial'
-        subproject = 'POC'
+        enabled = '0'
         taskType = 'DEPLOYER'
 
         // Custom properties
@@ -669,7 +662,7 @@ table.body .article {
           'text': '',
           'textFile': '',
           'textType': 'text',
-          'toList': 'POC_General_Users',
+          'toList': 'snaqvi@cloudbees.com',
         ]
         resourceName = 'k8s-agent'
         subpluginKey = 'EC-SendEmail'
@@ -678,12 +671,8 @@ table.body .article {
       }
 
       task 'Run smoke tests', {
-        actualParameter = [
-          'commandToRun': '''echo "Run smoke tests"
-  ectool setProperty "/myStageRuntime/ec_summary/Link to Application" "<html><a href="http://35.197.99.24/jpetstore" target=_blank>Click</a></html>"''',
-        ]
-        subpluginKey = 'EC-Core'
-        subprocedure = 'RunCommand'
+        command = '''echo "Run smoke tests"
+  ectool setProperty "/myStageRuntime/ec_summary/Link to Application" "<html><a href="http://35.197.99.24/jpetstore" target=_blank>Click</a></html>"'''
         taskType = 'COMMAND'
 
         // Custom properties
@@ -692,7 +681,7 @@ table.body .article {
 
       task 'Review Change Request Ticket', {
         actualParameter = [
-          'config_name': '/projects/POC/pluginConfigurations/snow',
+          'config_name': '/projects/AcmeGlobal/pluginConfigurations/WesSnowTest',
           'content': '{"state":"0"}',
           'filter': '',
           'property_sheet': '/myJobStep',
@@ -705,7 +694,7 @@ table.body .article {
 
       task 'Close Change Request Ticket', {
         actualParameter = [
-          'config_name': '/projects/POC/pluginConfigurations/snow',
+          'config_name': '/projects/AcmeGlobal/pluginConfigurations/WesSnowTest',
           'content': '{"state":"3","close_notes":"\\"Closed by CDRO\\""}',
           'filter': '',
           'property_sheet': '/myJobStep',
@@ -722,26 +711,7 @@ table.body .article {
     property 'ec_counters', {
 
       // Custom properties
-      pipelineCounter = '4'
-    }
-  }
-
-  deployerApplication 'Blogging Application', {
-    orderIndex = '1'
-    processName = 'Deploy Application'
-
-    deployerConfiguration '83b67e59-a189-11ed-8bff-22add0e795de', {
-      deployerTaskName = 'Deploy to QA'
-      environmentName = 'QA - K8S'
-      processName = 'Deploy Application'
-      stageName = 'QA'
-    }
-
-    deployerConfiguration '83c65d49-a189-11ed-91cb-22add0e795de', {
-      deployerTaskName = 'Deploy to Prod'
-      environmentName = 'PROD - K8S'
-      processName = 'Deploy Application'
-      stageName = 'Prod'
+      pipelineCounter = '14'
     }
   }
 }
