@@ -1,4 +1,4 @@
-release 'shozab_Release_Demo', {
+release 'shozab_Release_Demo1', {
   plannedEndDate = '2023-02-14'
   plannedStartDate = '2023-01-31'
   projectName = 'POC'
