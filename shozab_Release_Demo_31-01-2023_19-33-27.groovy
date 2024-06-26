@@ -1,4 +1,4 @@
-release 'shozab_Release_Demo2', {
+release 'shozab_Release_Demo', {
   plannedEndDate = '2023-02-14'
   plannedStartDate = '2023-01-31'
   projectName = 'POC'
@@ -12,7 +12,7 @@ release 'shozab_Release_Demo2', {
       expansionDeferred = '1'
     }
 
-    stage 'Release Readiness', {
+    stage 'Release Readiness2', {
       colorCode = '#00adee'
       duration = '0'
       pipelineName = 'Template Release Workflow'
