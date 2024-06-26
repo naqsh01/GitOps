@@ -12,7 +12,7 @@ release 'shozab_Release_Demo', {
       expansionDeferred = '1'
     }
 
-    stage 'Release Readiness2', {
+    stage 'Release Readiness', {
       colorCode = '#00adee'
       duration = '0'
       pipelineName = 'Template Release Workflow'
@@ -20,9 +20,9 @@ release 'shozab_Release_Demo', {
         }
 
       gate 'POST', {
-        task 'Code Coverage > 80', {
+        task 'Code Coverage > 90', {
           gateCondition = '''$[/javascript 
-  //myStageRuntime.tasks[\'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.coverage]	> 80	]'''
+  //myStageRuntime.tasks[\'Run Code Quality And Security Scan\'].job.getLastSonarMetrics.coverage]	> 90	]'''
           gateType = 'POST'
           subproject = 'POC'
           taskType = 'CONDITIONAL'
